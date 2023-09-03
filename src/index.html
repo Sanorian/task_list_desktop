@@ -1,0 +1,69 @@
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Task List</title>
+    <link rel="stylesheet" href="index.css" />
+    <link rel="icon" href="favicon.ico">
+  </head>
+  <body>
+    <h2 id='errorPlace'></h2>
+    <textarea id='textarea' placeholder='Feed the cat'></textarea>
+    <button onclick="addTask()">Add task</button>
+    <main id='main'>
+    </main>
+    <script>
+  let tasks = [], numberOf=0, main = document.getElementById('main');
+
+  tasks = localStorage.getItem('tasks') ? localStorage.getItem('tasks').split('0C1O2M3M4A5') : [];
+  if (tasks.length!=0){
+    tasks.forEach((task)=>{
+      numberOf++;
+	    main.innerHTML+='<div id="taskDiv'+numberOf+'" class="allTasks"><div class="textDiv"><p id="taskParagraph'+numberOf+'">'+task+'</p></div><button onclick="deleteTask('+numberOf+')" id="taskButton'+numberOf+'">Delete task</button></div>';
+    });
+  }
+  function addTask(){
+    document.getElementById('errorPlace').innerHTML = '';
+    let task = document.getElementById('textarea').value,
+      flag = 0, stringTasks = '';
+	if (task!=''){
+    tasks.push(task);
+    main.innerHTML = '';
+    tasks.forEach((task)=>{
+      flag++;
+      if (flag!=tasks.length){
+        stringTasks += task + '0C1O2M3M4A5';
+      } else{
+        stringTasks += task;
+      }
+    });
+    localStorage.setItem('tasks', stringTasks);
+    tasks.forEach((task)=>{
+      numberOf++;
+	    main.innerHTML+= '<div id="taskDiv'+numberOf+'" class="allTasks"><div class="textDiv"><p id="taskParagraph'+numberOf+'">'+task+'</p><</div><button onclick="deleteTask('+numberOf+')" id="taskButton'+numberOf+'">Delete task</button></div>';
+    });
+	} else {
+	document.getElementById('errorPlace').innerHTML = 'You need to add task itself';
+	}
+   document.getElementById('textarea').value = '';
+}
+
+  function deleteTask(id){
+    let taskText = document.getElementById('taskParagraph'+id).innerHTML;
+    tasks = tasks.filter((task)=>{
+      return task != taskText;
+    });
+    let flag=0, stringTasks = '';
+    tasks.forEach((task)=>{
+      flag++;
+      if (flag!=tasks.length){
+        stringTasks += task + '0C1O2M3M4A5';
+      } else{
+        stringTasks += task;
+      }
+    });
+    document.getElementById('taskDiv'+id).remove();
+    localStorage.setItem('tasks', stringTasks);
+  }
+    </script>
+  </body>
+</html>
